@@ -8,7 +8,7 @@ from .base import *
 DEBUG = False
 
 # Azure will provide the hostname
-ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME', 'localhost'), '127.0.0.1']
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 
 # Database configuration - Azure PostgreSQL
 DATABASES = {

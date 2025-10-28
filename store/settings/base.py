@@ -10,7 +10,7 @@ SECRET_KEY = 'your-secret-key-here'  # Make sure this is set
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True  # Set to True for development
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']  # Add this line
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']  # Add this line
 
 # Application definition
 INSTALLED_APPS = [
