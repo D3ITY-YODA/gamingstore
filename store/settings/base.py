@@ -143,4 +143,5 @@ if 'WEBSITE_HOSTNAME' in os.environ:  # Detect Azure environment
         DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
         AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME')
         AZURE_ACCOUNT_KEY = os.environ.get('AZURE_ACCOUNT_KEY')
-        AZURE_CONTAINER = 'media'ROOT_URLCONF = "store.urls"
+        AZURE_CONTAINER = "media"
+ROOT_URLCONF = "store.urls"
