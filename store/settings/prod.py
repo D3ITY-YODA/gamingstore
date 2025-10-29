@@ -1,45 +1,35 @@
 """
-Production settings for Azure deployment
+Production settings for Render deployment
 """
 import os
 from .base import *
+import dj_database_url
 
 # Debug mode off
-DEBUG = False
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-# Azure will provide the hostname
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+# Render hostnames
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '.onrender.com,localhost,127.0.0.1').split(',')
 
-# Database configuration - Azure PostgreSQL
+# Database configuration - Render PostgreSQL
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'postgres'),
-        'USER': os.environ.get('DB_USER', '') + '@' + os.environ.get('DB_HOST', '').split('.')[0],
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
-        'HOST': os.environ.get('DB_HOST', ''),
-        'PORT': '5432',
-        'OPTIONS': {'sslmode': 'require'},
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Security
-SECRET_KEY = os.environ.get('SECRET_KEY', 'your-production-secret-key-here')
-CSRF_TRUSTED_ORIGINS = [f"https://{os.environ.get('WEBSITE_HOSTNAME', 'localhost')}"]
-
-# DON'T modify MIDDLEWARE here - use what's imported from base.py
-# Just ensure WhiteNoise storage is set
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Azure Storage for media files (optional)
-if os.environ.get('AZURE_ACCOUNT_NAME'):
-    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-    AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME')
-    AZURE_ACCOUNT_KEY = os.environ.get('AZURE_ACCOUNT_KEY')
-    AZURE_CONTAINER = 'media'
+# Security
+SECRET_KEY = os.environ.get('SECRET_KEY')
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 
-# Ensure we have all required middleware by not overriding the imported MIDDLEWARE
-print("Production settings loaded - using middleware from base settings")
+# Media files (use local storage for now)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+print("Render production settings loaded")

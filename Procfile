@@ -1,1 +1,1 @@
-web: gunicorn gamingstore.wsgi:application
+web: gunicorn store.wsgi:application --bind 0.0.0.0:$PORT
